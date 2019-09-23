@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="assignment2.css">
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesh
+eet' />
+</head>
+
+<body>
+	<div id='map' class="fl"></div>
+	<div class='map-overlay' id='title'>
+		<h2>Last Five Years Victoria Traffic Accident Map</h2>
+		<div id='info'><p>Hover over a point!</p></div>
+	</div>
+	<div class='map-overlay' id='legend'>
+		<ul>
+			<li>
+				<div class="non_injury_accident fl circle"></div>
+				Non & Other injury accident
+				<div class="button fr">
+					<input type="checkbox" id="non_injury" onclick="non_injury_function()" checked>
+				</div>
+			</li>
+			<!-- <li>
+				<div class="other_injury_accident fl circle"></div>
+				Other injury accident
+				<div class="button fr">
+					<input type="checkbox" id="other_injury" onclick="other_injury_function()" checked>
+				</div>
+			</li> -->
+			<li>
+				<div class="serious_injury_accident fl circle"></div>
+				Serious injury accident
+				<div class="button fr">
+					<input type="checkbox" id="serious_injury" onclick="serious_injury_function()" checked>
+				</div>
+			</li>
+			<li>
+				<div class="fatal_accident fl circle"></div>
+				Fatal accident
+				<div class="button fr">
+					<input type="checkbox" id="fatal" onclick="fatal_function()" checked>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<p id="text" style="display: none">check checkbox checked</p>
+	
+	<div id="intro">GEOM90007 Assignment2 Changda Jiang 879725</div>
+
+	<div id="rightChart" class="fr">
+		<div id="lineChart" ></div>
+
+		<div id="colChart" ></div>
+
+		<div id="colChartLegend">
+			<ul>
+				<li><i></i> METROPOLITAN SOUTH EAST REGION</li>
+				<li>METROPOLITAN NORTH WEST REGION</li>
+				<li>SOUTH WESTERN REGION</li>
+				<li>NORTH EASTERN REGION</li>
+				<li>EASTERN REGION</li>
+				<li>WESTERN REGION</li>
+				<li>NORTHERN REGION</li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+		mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhbmdkYWoiLCJhIjoiY2p6dWZ4ZnFpMDE1cjNtcGY4bTJ1Zm8ybyJ9.q9E3nHqoKER3Le3GWobzDA';
+
+		var map = new mapboxgl.Map({
+  			container: 'map',
+  			style: 'mapbox://styles/mapbox/light-v9',
+  			center: [144.96, -37.81],
+			zoom: 14
+		});
+
+		map.addControl(new mapboxgl.NavigationControl());
+
+		map.on('load', function() {
+			
+		  	map.addLayer({
+  				id: 'non_injury_points',
+    			type: 'circle',
+    			source:{
+    				type: 'vector',
+      				url: 'mapbox://changdaj.7uhpt6nd'
+				},
+    			'source-layer': 'A2_Crashes_Last_Five_Years-dnn7fz',
+				paint: {
+     			'circle-color': '#fee5d9',
+            	'circle-stroke-width': 1, 
+            	'circle-stroke-color': '#888888',
+            	'circle-opacity': 0.8,
+            	 'circle-radius': {
+        			'stops': [
+          			[11, 2],
+          			[22, 160]
+        			],
+        			'base': 1.75
+            	},
+				},
+				'filter': ['==', 'SEVERITY', 'Non injury accident']
+  			})  
+			
+			map.addLayer({
+  				id: 'other_injury_points',
+    			type: 'circle',
+    			source:{
+    				type: 'vector',
+      				url: 'mapbox://changdaj.7uhpt6nd'
+				},
+    			'source-layer': 'A2_Crashes_Last_Five_Years-dnn7fz',
+				paint: {
+     			'circle-color': '#fcae91',
+            	'circle-stroke-width': 1, 
+            	'circle-stroke-color': '#888888',
+            	'circle-opacity': 0.8,
+            	 'circle-radius': {
+        			'stops': [
+          			[11, 2],
+          			[22, 160]
+        			],
+        			'base': 1.75
+            	},
+				},
+				'filter': ['==', 'SEVERITY', 'Other injury accident']
+  			})  
+
+		  	map.addLayer({
+  				id: 'serious_injury_points',
+    			type: 'circle',
+    			source:{
+    				type: 'vector',
+      				url: 'mapbox://changdaj.7uhpt6nd'
+				},
+    			'source-layer': 'A2_Crashes_Last_Five_Years-dnn7fz',
+				paint: {
+     			'circle-color': '#fb6a4a',
+            	'circle-stroke-width': 1, 
+            	'circle-stroke-color': '#888888',
+            	'circle-opacity': 0.8,
+            	 'circle-radius': {
+        			'stops': [
+          			[11, 2],
+          			[22, 160]
+        			],
+        			'base': 1.75
+            	},
+				},
+				'filter': ['==', 'SEVERITY', 'Serious injury accident']
+  			})
+
+			map.addLayer({
+  				id: 'fatal_points',
+    			type: 'circle',
+    			source:{
+    				type: 'vector',
+      				url: 'mapbox://changdaj.7uhpt6nd'
+				},
+    			'source-layer': 'A2_Crashes_Last_Five_Years-dnn7fz',
+				paint: {
+     			'circle-color': '#cb181d',
+            	'circle-stroke-width': 1, 
+            	'circle-stroke-color': '#888888',
+            	'circle-opacity': 0.8,
+            	 'circle-radius': {
+        			'stops': [
+          			[11, 2],
+          			[22, 160]
+        			],
+        			'base': 1.75
+            	},
+				},
+				'filter': ['==', 'SEVERITY', 'Fatal accident']
+  			})
+
+			
+			map.on('mousemove', function(i) {
+				var carshInfo = map.queryRenderedFeatures(i.point, { 
+					layers: ['non_injury_points','other_injury_points',
+					'serious_injury_points','fatal_points']
+					});
+				if (carshInfo.length > 0) {
+					document.getElementById('info').innerHTML = 
+					'<p>' + "Date: " + carshInfo[0].properties.ACCIDENT_DATE + 
+					'<p>' + "Time: " + carshInfo[0].properties.ACCIDENT_TIME + 
+					'<p>' + "Severity: " + carshInfo[0].properties.SEVERITY + 
+					'<p>' + "Accident Type: " + carshInfo[0].properties.ACCIDENT_TYPE + 
+					'<p>' + "Clicking point can view more details :)".fontcolor("red")
+					'</p>'; 
+					} 
+    			else {
+					document.getElementById('info').innerHTML = 
+					'<p>Zoom in or hover a clear point.</p>'; 
+					}
+			});
+			
+			var layerNames = ['non_injury_points','other_injury_points',
+					'serious_injury_points','fatal_points']
+
+			for (var i=0;i<layerNames.length;i++){
+				var layerName = layerNames[i];
+
+				map.on('mouseenter', layerName, function () {
+					map.getCanvas().style.cursor = 'pointer'; 
+				});
+
+				// Change it back to a pan icon when it leaves.
+				map.on('mouseleave', layerName, function () {
+					map.getCanvas().style.cursor = ''; 
+					});
+				
+				map.on('click', layerName, function (e) {
+					new mapboxgl.Popup()
+					.setLngLat(e.lngLat)
+					.setHTML("Drunk driving: " + e.features[0].properties.ALCOHOLTIME 
+							+ "<br> Run offroad: " + e.features[0].properties.RUN_OFFROAD
+							+ "<br> Total person number: " + e.features[0].properties.TOTAL_PERSONS
+					)
+					.addTo(map);
+					});
+
+			}			
+		});
+
+		function non_injury_function(){
+			var checkbox = document.getElementById("non_injury");
+			if(checkbox.checked == true){
+				map.setLayoutProperty('non_injury_points', 'visibility', 'visible');
+				map.setLayoutProperty('other_injury_points', 'visibility', 'visible');
+			} else {
+				map.setLayoutProperty('non_injury_points', 'visibility', 'none');
+				map.setLayoutProperty('other_injury_points', 'visibility', 'none');
+
+			}
+		}
+
+		function serious_injury_function(){
+			var checkbox = document.getElementById("serious_injury");
+			if(checkbox.checked == true){
+				map.setLayoutProperty('serious_injury_points', 'visibility', 'visible');
+			} else {
+				map.setLayoutProperty('serious_injury_points', 'visibility', 'none');
+
+			}
+		}
+
+		function fatal_function(){
+			var checkbox = document.getElementById("fatal");
+			if(checkbox.checked == true){
+				map.setLayoutProperty('fatal_points', 'visibility', 'visible');
+			} else {
+				map.setLayoutProperty('fatal_points', 'visibility', 'none');
+
+			}
+		}
+		
+		google.charts.load('current', {'packages':['corechart']});
+      	google.charts.setOnLoadCallback(drawLineChart);
+		
+		function drawLineChart(){
+			var data1 = google.visualization.arrayToDataTable([
+          ['Year', 'Occurrence'],
+          ['2014',  14243],
+          ['2015',  14427],
+          ['2016',  14349],
+          ['2017',  12281],
+		  ['2018',  11177]
+        ]);
+
+			var options1 = {
+          		title: '2014-2018 Crashes in Victoria',
+          		curveType: 'function',
+          		legend: { position: 'bottom' }
+        	};
+
+			var chart1 = new google.visualization.LineChart(document.getElementById('lineChart'));
+
+        	chart1.draw(data1, options1);
+		}
+
+		google.charts.load("current", {packages:['corechart','bar']});
+    	google.charts.setOnLoadCallback(drawColChart);
+		function drawColChart(){
+			var data2 = google.visualization.arrayToDataTable([
+         		['Rigion', 'Crashes Amount', { role: 'style' }],
+         		['METROPOLITAN SOUTH EAST REGION', 26486, '#e41a1c'],     
+				['METROPOLITAN NORTH WEST REGION', 26693, '#377eb8'],       
+         		['SOUTH WESTERN REGION', 5478, '#4daf4a'],
+				['NORTH EASTERN REGION', 4155, '#984ea3'],
+				['EASTERN REGION', 4152, '#ff7f00' ],
+				['WESTERN REGION', 3830, '#ffff33' ],
+				['NORTHERN REGION', 4155, '#a65628' ],
+				
+      	]);
+		  	var view2 = new google.visualization.DataView(data2);
+      		view2.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      		var options2 = {
+        		title: "Accidents",
+        		// width: 600,
+        		// height: 400,
+        		bar: {groupWidth: "95%"},
+        		legend: { position: "none" },
+				hAxis:{
+					baselineColor: '#fff',
+         			gridlineColor: '#fff',
+         			textPosition: 'none',
+       			}
+      		};
+
+      		var chart2 = new google.visualization.ColumnChart(document.getElementById("colChart"));
+      		//chart2.draw(view, options);
+			chart2.draw(data2, options2);
+		}
+	</script>
+</body>
+</html>
